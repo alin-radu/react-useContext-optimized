@@ -8,20 +8,21 @@ import {
 } from 'react';
 
 type Store = { first: string; last: string };
+type UseStoreDataReturnType = ReturnType<typeof useStoreData>;
 
-function useStoreData(): {
+// useStoreData //////////////////////////////////////////////////////////////////////////////////
+const useStoreData = (): {
   get: () => Store;
   set: (value: Partial<Store>) => void;
   subscribe: (callback: () => void) => () => void;
-} {
+} => {
   const store = useRef({
     first: '',
     last: '',
   });
+  const subscribers = useRef(new Set<() => void>());
 
   const get = useCallback(() => store.current, []);
-
-  const subscribers = useRef(new Set<() => void>());
 
   const set = useCallback((value: Partial<Store>) => {
     store.current = { ...store.current, ...value };
@@ -35,10 +36,9 @@ function useStoreData(): {
   }, []);
 
   return { get, set, subscribe };
-}
+};
 
-type UseStoreDataReturnType = ReturnType<typeof useStoreData>;
-
+// context ///////////////////////////////////////////////////////////////////////////////////////
 const StoreContext = createContext<UseStoreDataReturnType | null>(null);
 
 function Provider({ children }: { children: React.ReactNode }) {
@@ -47,10 +47,12 @@ function Provider({ children }: { children: React.ReactNode }) {
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 }
 
-function useStore<SelectorOutput>(
+// useStore //////////////////////////////////////////////////////////////////////////////////////
+const useStore = <SelectorOutput,>(
   selector: (store: Store) => SelectorOutput
-): [SelectorOutput, (value: Partial<Store>) => void] {
+): [SelectorOutput, (value: Partial<Store>) => void] => {
   const store = useContext(StoreContext);
+
   if (!store) {
     throw new Error('Store not initialized');
   }
@@ -62,12 +64,16 @@ function useStore<SelectorOutput>(
   const [state, setState] = useState(selectedValue);
 
   useEffect(() => {
-    return store.subscribe(() => setState(selectedValue));
+    // the return value off store.subscribe() is an unsubscribe
+    const subscribe = store.subscribe(() => setState(selectedValue));
+
+    return subscribe;
   }, []);
 
   return [state, store.set];
-}
+};
 
+// components ////////////////////////////////////////////////////////////////////////////////////
 const TextInput = ({ value }: { value: 'first' | 'last' }) => {
   const [fieldValue, setStore] = useStore((store) => store[value]);
   return (

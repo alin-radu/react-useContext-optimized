@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 export default function createFastContext<Store>(initialState: Store) {
+  // useStoreData ////////////////////////////////////////////////////////////////////////////////
   function useStoreData(): {
     get: () => Store;
     set: (value: Partial<Store>) => void;
@@ -33,6 +34,7 @@ export default function createFastContext<Store>(initialState: Store) {
     return { get, set, subscribe };
   }
 
+  // context /////////////////////////////////////////////////////////////////////////////////////
   type UseStoreDataReturnType = ReturnType<typeof useStoreData>;
 
   const StoreContext = createContext<UseStoreDataReturnType | null>(null);
@@ -43,6 +45,7 @@ export default function createFastContext<Store>(initialState: Store) {
     return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
   }
 
+  // useStore ////////////////////////////////////////////////////////////////////////////////////
   function useStore<SelectorOutput>(
     selector: (store: Store) => SelectorOutput
   ): [SelectorOutput, (value: Partial<Store>) => void] {
