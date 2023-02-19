@@ -10,7 +10,6 @@
 
 ### II. GITHUB
 
-- https://github.com/alin-radu/react-useContext-optimized.git
 - git@github.com:alin-radu/react-useContext-optimized.git
 
 ### III. APP
