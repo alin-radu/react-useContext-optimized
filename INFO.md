@@ -1,16 +1,18 @@
-### INFO
+## INFO
 
-#### I. TUTORIAL:
+### I. TUTORIAL
 
-##### 1. Making React Context FAST!
-* title: Making React Context FAST!
-* author: Jack Herrington
-* link: https://www.youtube.com/watch?v=ZKlXqrcBx88&t=18s 
+#### 1. Making React Context FAST!
 
-#### II. GITHUB: 
+- title: Making React Context FAST!
+- author: Jack Herrington
+- link: https://www.youtube.com/watch?v=ZKlXqrcBx88&t=18s
+
+### II. GITHUB
 
 - https://github.com/alin-radu/react-useContext-optimized.git
 - git@github.com:alin-radu/react-useContext-optimized.git
 
-#### III. APP: -
+### III. APP
 
+- ...
